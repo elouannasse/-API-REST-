@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -10,10 +9,10 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,HasApiTokens;
+    use HasApiTokens, HasFactory, Notifiable; 
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that are mass assignable
      *
      * @var array<int, string>
      */
@@ -21,6 +20,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone_number',
+        'skills',
+        'is_admin',
     ];
 
     /**
@@ -41,5 +43,31 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'skills' => 'array',
+        'is_admin' => 'boolean',
     ];
+
+    
+
+    
+    public function cvs()
+    {
+        return $this->hasMany(UserCV::class);
+    }
+
+    /**
+     * Get all candidatures for the user.
+     */
+    public function candidatures()
+    {
+        return $this->hasMany(Candidature::class);
+    }
+
+    /**
+     * Get all job offers that the user has applied to.
+     */
+    public function offres()
+    {
+        return $this->belongsToMany(Offre::class, 'candidatures'); 
+    }
 }

@@ -27,16 +27,16 @@ class UserController extends Controller
              'user'=>$user,201
         ]);
     }
+
     public function login(Request $request){
         
        $request->validate([
          "email"=>'required|email',
-         'password'=>'required|string'
+         'password'=>'required|string' 
 
        ]);
        if(!Auth::attempt($request->only('email','password'))){
         return response()->json(['messge=>invalide email or password'],401);
-
        }
       $user = User::where('email',$request->email)->firstOrFail();
      $token = $user->createToken('auth_Token')->plainTextToken;
@@ -48,13 +48,13 @@ class UserController extends Controller
          'Token'=>$token
     ]);
     }
-    public function logoute(Request $request){
+    public function logout(Request $request){
         $request->user()->currentAccessToken()->delete();
         return response()->json([
-            'message'=>'logout succefull'  ]);
+            'message'=>'logout succefull'  ]);     
 
 
 
 
-    }
+    } 
 }
